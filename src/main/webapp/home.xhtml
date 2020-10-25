@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/principal.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="titulo_perros">
+        Paseando Perros - Listado
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="grwlErroresHome"/>
+        <h:form>
+            <p:panel id="panelPerros" header="Listado perros - #{listaSEController.listaPerros.contarNodos()}">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Número"/>
+                    <p:outputLabel value="#{listaSEController.perroMostrar.numero}"/>
+                    <p:outputLabel value="Nombre"/>
+                    <p:outputLabel value="#{listaSEController.perroMostrar.nombre}"/>
+                    <p:outputLabel value="Edad"/>
+                    <p:outputLabel value="#{listaSEController.perroMostrar.edad}"/>
+                    <p:outputLabel value="Genero"/>
+                    <p:outputLabel value="#{listaSEController.perroMostrar.genero}"/>
+                </p:panelGrid>
+                <p:panelGrid columns="3">
+                    <p:commandButton value="Primero" disabled="#{listaSEController.temp == listaSEController.listaPerros.cabeza}">
+                        <p:ajax listener="#{listaSEController.irPrimero()}" update="panelPerros"/>
+                    </p:commandButton>
+                    <p:commandButton value="Siguiente" disabled="#{listaSEController.temp.siguiente == null}" >
+                        <p:ajax listener="#{listaSEController.irSiguiente()}" update="panelPerros"/>
+                    </p:commandButton>
+                    <p:commandButton value="Último" disabled="#{listaSEController.temp.siguiente == null}">
+                        <p:ajax listener="#{listaSEController.irUltimo()}" update="panelPerros"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Invertir Lista">
+                        <p:ajax listener="#{listaSEController.invertir()}" update=":grwlErroresHome,panelPerros,frmBuscar"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Intercambiar extremos">
+                        <p:ajax listener="#{listaSEController.intercambiar()}" update=":grwlErroresHome,panelPerros"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Eliminar">
+                        <p:ajax listener="#{listaSEController.eliminar()}" update="panelPerros"/>
+                    </p:commandButton>
+                </p:panelGrid>          
+
+
+            </p:panel>
+        </h:form>
+        <h:form id="frmBuscar">
+            <p:panel header="Buscar perro x Posicion">
+                <p:outputLabel value="Ingrese la posición a buscar"/>
+                <p:spinner id="datobuscar" value="#{listaSEController.datobuscar}" min="1" max="#{listaSEController.listaPerros.contarNodos()}"/>
+                <p:commandButton value="Buscar" disabled="#{listaSEController.getTotalPerros() == 0}" update="pnlPerroEnc" action="#{listaSEController.buscarPerro()}" oncomplete="PF('dlgPerroEnc').show();">
+
+                </p:commandButton>
+
+                <p:outputLabel value="Orden Genero"/>
+                <p:spinner />
+                <p:commandButton value="Buscar" >
+
+                </p:commandButton>
+            </p:panel>
+
+            <p:dialog header="Perro Encontrado" widgetVar="dlgPerroEnc" modal="true" height="200" closeOnEscape="true">
+                <p:panel id="pnlPerroEnc" header="Datos perro">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Numero" />
+                        <h:outputText value="#{listaSEController.perroEncontrado.numero}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{listaSEController.perroEncontrado.nombre}" />
+                        <h:outputText value="Edad" />
+                        <h:outputText value="#{listaSEController.perroEncontrado.edad}" />                    
+                        <h:outputText value="Genero" />
+                        <h:outputText value="#{listaSEController.perroEncontrado.genero}" />
+                    </p:panelGrid>
+                </p:panel>
+            </p:dialog>
+
+            <p:diagram id="dgrPerros" value="#{listaSEController.model}" style="height:600px" styleClass="ui-widget-content" />
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/principal.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+    
+    <ui:define name="titulo_perros">
+        Paseando Perros - Listado
+    </ui:define>
+    
+    <ui:define name="content">
+        <p:growl id="grwlErroresHome"/>
+        <h:form>
+            <p:panel id="panelPerros" header="Listado perros DE - ">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Número"/>
+                    <p:outputLabel value="#{listaDEController.perroMostrar.numero}"/>
+                    <p:outputLabel value="Nombre"/>
+                    <p:outputLabel value="#{listaDEController.perroMostrar.nombre}"/>
+                    <p:outputLabel value="Edad"/>
+                    <p:outputLabel value="#{listaDEController.perroMostrar.edad}"/>
+                    <p:outputLabel value="Genero"/>
+                    <p:outputLabel value="#{listaDEController.perroMostrar.genero}"/>
+                </p:panelGrid>
+                <p:panelGrid columns="3">
+                    <p:commandButton value="Primero" disabled="#{listaDEController.tempDE == listaDEController.listaPerros.cabeza}">
+                        <p:ajax listener="#{listaDEController.irPrimero()}" update="panelPerros"/>
+                    </p:commandButton>
+                    <p:commandButton value="Siguiente" disabled="#{listaDEController.tempDE.siguiente == null}" >
+                        <p:ajax listener="#{listaDEController.irSiguiente()}" update="panelPerros"/>
+                    </p:commandButton>
+                    <p:commandButton value="Último" disabled="#{listaDEController.tempDE.siguiente == null}">
+                        <p:ajax listener="#{listaDEController.irUltimo()}" update="panelPerros"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Invertir Lista">
+                        <p:ajax listener="#{listaDEController.invertir()}" update=":grwlErroresHome,panelPerros,frmBuscarDE"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Intercambiar extremos">
+                        <p:ajax listener="#{listaDEController.intercambiar()}" update=":grwlErroresHome,panelPerros"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Eliminar">
+                        <p:ajax listener="#{listaDEController.eliminar()}" update="panelPerros"/>
+                    </p:commandButton>
+                </p:panelGrid>          
+            </p:panel>
+        </h:form>
+        <h:form id="frmBuscarDE">
+            <p:panel header="Buscar perro x Posicion">
+                <p:outputLabel value="Ingrese la posición a buscar"/>
+                <p:spinner id="datobuscar" value="" min="1" max=""/>
+                <p:commandButton value="Buscar" update="pnlPerroEnc"  oncomplete="PF('dlgPerroEnc').show();">
+
+                </p:commandButton>
+
+                <p:outputLabel value="Orden Genero"/>
+                <p:spinner />
+                <p:commandButton value="Buscar" >
+
+                </p:commandButton>
+            </p:panel>
+
+            <p:dialog header="Perro Encontrado" widgetVar="dlgPerroEnc" modal="true" height="200" closeOnEscape="true">
+                <p:panel id="pnlPerroEnc" header="Datos perro">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Numero" />
+                        <h:outputText value="#{listaDEController.perroEncontrado.numero}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{listaDEController.perroEncontrado.nombre}" />
+                        <h:outputText value="Edad" />
+                        <h:outputText value="#{listaDEController.perroEncontrado.edad}" />                    
+                        <h:outputText value="Genero" />
+                        <h:outputText value="#{listaDEController.perroEncontrado.genero}" />
+                    </p:panelGrid>
+                </p:panel>
+            </p:dialog>
+
+            <p:diagram id="dgrPerros"  style="height:600px" styleClass="ui-widget-content" />
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+

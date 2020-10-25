@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/principal.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo_perrosde">
+        Paseando Perros - Formulario 
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="grwlErrores"/>
+        <h:form id="frmPerroDE" prependId="false">
+            <p:panel header="Formulario de Registro de Perros DE">                    
+               
+                    <p:panelGrid columns="2">
+                    <h:outputText value="Numero" />
+                    <p:spinner value="#{listaDEController.perroEncontrado.numero}" min="1"/>
+                    <h:outputText value="Nombre:" />
+                    <p:inputText id="nombre" value="#{listaDEController.perroEncontrado.nombre}" required="true"/>
+                    <h:outputText value="Edad" />
+                    <p:spinner value="#{listaDEController.perroEncontrado.edad}" min="1" required="true"/>                    
+                    <h:outputText value="Genero" />
+                    <p:inputText value="#{listaDEController.perroEncontrado.genero}" required="true" />
+                    
+                    <p:outputLabel value="Ubicacion"/>
+                    <p:selectOneMenu id="ubicacion" required="true" value="#{listaDEController.seleccionUbicacion}">
+                        <f:selectItem itemLabel="Seleccione uno" itemEscaped="true"/>
+                        <f:selectItem itemValue="1" itemLabel="Al inicio"/>
+                        <f:selectItem itemValue="2" itemLabel="Al final"/>
+                    </p:selectOneMenu>               
+                    <p:commandButton value="Guardar"  update=":grwlErrores,frmPerroDE" action="#{listaDEController.guardarPerro()}">
+                    </p:commandButton>
+                    <p:commandButton value="Limpiar" update="@all" action="#{listaDEController.irCrearPerroDE()}">
+                        <p:ajax update="frmPerroDE" listener="#{listaDEController.irCrearPerroDE()}"/>
+                    </p:commandButton>
+                </p:panelGrid>                 
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
